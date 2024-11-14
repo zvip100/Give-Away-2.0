@@ -1,0 +1,54 @@
+{
+  "name": "freeGA",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A Node.js application that interacts with a PostgreSQL database using the Drizzle ORM.",
+  "main": "app.js",
+  "scripts": {
+    "copy-schema-linux": "cp ./drizzle/schema.ts ./drizzle/schema.js",
+    "copy-schema-win": "copy .\\drizzle\\schema.ts .\\drizzle\\schema.js",
+    "start:win": "npm run copy-schema-win && node app.js",
+    "start:linux": "npm run copy-schema-linux && node app.js",
+    "start": "node ../copySchema.js && node app.js",
+    "db:generate": "drizzle-kit generate",
+    "db:pull": "drizzle-kit pull",
+    "db:push": "npm run db:generate && npm run db:build",
+    "db:build": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:help": "drizzle-kit --help",
+    "build": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "tsc:v": "tsc -v"
+  },
+  "keywords": [
+    "node",
+    "postgresql",
+    "drizzle-orm"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
+    "drizzle-orm": "^0.33.0",
+    "express": "^5.0.0",
+    "get-intrinsic": "^1.2.4",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.12.0",
+    "postgres": "^3.4.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.16",
+    "@types/pg": "^8.11.8",
+    "drizzle-kit": "^0.24.2",
+    "eslint": "^8.32.0",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.2"
+  }
+}

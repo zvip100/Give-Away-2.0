@@ -1,0 +1,1 @@
+ALTER TABLE "items_new" ADD COLUMN "received_by" integer;

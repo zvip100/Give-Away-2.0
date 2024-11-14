@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ESNext", // or "ES6"
+        "module": "ESNext", // Use "ES6" or "ESNext" for ES modules
+        "moduleResolution": "node", // Use Node module resolution
+        "esModuleInterop": true, // Allows default imports from modules with no default export
+        "skipLibCheck": true, // Optional: skips type checking of declaration files
+        "forceConsistentCasingInFileNames": true // Optional: enforces consistent file naming
+    },
+    "include": [
+        "drizzle/*.ts",
+        "**/*",
+    ], // Adjust based on your project structure
+    "exclude": [
+        "node_modules"
+    ]
+}

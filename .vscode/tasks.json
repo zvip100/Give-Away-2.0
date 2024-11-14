@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Copy TS to JS",
+            "type": "shell",
+            "command": "node",
+            "args": [
+                "${workspaceFolder}/copySchema.js" 
+            ],
+            "problemMatcher": [],
+            "group": "build"
+        }
+    ]
+}
