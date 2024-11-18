@@ -1,4 +1,4 @@
-import { db, eq, count, items, users } from "../db.js";
+import { db, eq, count, items, users, watchList } from "../db.js";
 
 export async function getItemsAmount() {
   const itemsAmount = await db
@@ -32,4 +32,22 @@ export async function getAllUsers() {
     })
     .from(users);
   return allUsrs;
+}
+
+export async function getWatchList() {
+  try {
+    const watchListItems = await db
+      .selectDistinct({
+        id: watchList.item_id,
+        item: items.name,
+        url: items.image_url,
+      })
+      .from(watchList)
+      .innerJoin(items, eq(watchList.item_id, items.id))
+      .orderBy(watchList.item_id);
+    console.log("watch list admin fetch: ", watchListItems);
+    return watchListItems;
+  } catch (err) {
+    console.error("Error from watch-list report fetch: ", err);
+  }
 }

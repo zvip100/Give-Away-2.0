@@ -4,6 +4,7 @@ import {
   getGivenAwayAmount,
   getTotalUsers,
   getAllUsers,
+  getWatchList
 } from "../models/admin.js";
 
 const router = Router();
@@ -41,6 +42,15 @@ router.get("/reports/all-users", async (req, res) => {
     res.json(allUsers);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+router.get("/reports/watch-list", async (req, res) => {
+  try {
+    const watchList = await getWatchList();
+    res.json(watchList);
+  } catch (err) {
+    res.status(500).json({ message: err.message });  
   }
 });
 

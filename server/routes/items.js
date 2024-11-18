@@ -10,6 +10,7 @@ import {
   findItemById,
   updateItemStatus,
   addToWatchList,
+  getWatchList,
 } from "../models/items.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -92,6 +93,17 @@ router.post("/watch_list/:id", async (req, res) => {
       return;
     }
     res.status(201).json(item);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+router.get("/watch_list/:user_id", async (req, res) => {
+  const userId = req.params.user_id;
+
+  try {
+    const watchListItems = await getWatchList(userId);
+    res.json(watchListItems);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

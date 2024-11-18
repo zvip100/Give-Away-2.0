@@ -134,3 +134,18 @@ export const addToWatchList = async (itemId, userId) => {
     console.error("Error adding to watch list: ", error);
   }
 };
+
+export const getWatchList = async (userId) => {
+  try {
+    const item = await db
+      .select()
+      .from(watchList)
+      .where(eq(watchList.user_id, userId))
+      .innerJoin(items, eq(watchList.item_id, items.id))
+      .innerJoin(conditions, eq(items.condition_id, conditions.id));
+    console.log(item);
+    return item;
+  } catch (error) {
+    console.error("Error getting the items from Watch list: ", error);
+  }
+};

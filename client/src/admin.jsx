@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./App";
 import logo from "./assets/logo.svg";
+import { WatchListReport } from "./watch-list-report";
 
 export function AdminPage({ title }) {
   function ChangePageTitle() {
@@ -24,6 +25,7 @@ export function AdminPage({ title }) {
   const [about, setAbout] = useState("");
   const [users, setUsers] = useState("");
   const [showUsersReport, setShowUsersReport] = useState(false);
+  const [showWLReport, setShowWLReport] = useState(false);
 
   function checkIfLoggedIn() {
     if (currentUser !== null && currentUser !== undefined) {
@@ -111,12 +113,35 @@ export function AdminPage({ title }) {
     }
   }
 
+  async function GetWatchListReport() {
+    try {
+      const response = await fetch(
+        "http://localhost:4000/admin/reports/watch-list",
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      const result = await response.json();
+      console.log(result);
+      setItemAmount(result);
+      //setShowBtn(true);
+      //setAbout("watch-list");
+      setShowWLReport(true);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
   function handleChange(event) {
     const selectedOption = event.target.value;
     setDrpodownValue(selectedOption);
     console.log(dropdownValue);
+    setShowBtn(false);
     setShowReport(false);
     setShowUsersReport(false);
+    setShowWLReport(false);
 
     if (selectedOption === "See total amount of items on site") {
       getItemAmountReport();
@@ -126,6 +151,8 @@ export function AdminPage({ title }) {
       getUserTotalReport();
     } else if (selectedOption === "See all users") {
       getAllUsersReport();
+    } else if (selectedOption === "See all items added to watch list") {
+      GetWatchListReport();
     }
   }
 
@@ -144,9 +171,10 @@ export function AdminPage({ title }) {
       </div>
 
       {loggedIn ? (
-
         <>
-          <button type="button" onClick={()=> navigate("./categories")}>Categories</button>
+          <button type="button" onClick={() => navigate("./categories")}>
+            Categories
+          </button>
           <h2>Admin Reports:</h2>
 
           <select
@@ -188,7 +216,7 @@ export function AdminPage({ title }) {
               <h1>All Users:</h1>
               {users.map((user, index) => (
                 <div key={index} className="single-user">
-                  <h2 style={{fontStyle:"italic"}}>~ User {index + 1} ~</h2>
+                  <h2 style={{ fontStyle: "italic" }}>~ User {index + 1} ~</h2>
                   <p>=====</p>
                   <h3>Id:</h3>
                   <p>{user.id}</p>
@@ -201,6 +229,21 @@ export function AdminPage({ title }) {
                   <h3>Account Created:</h3>
                   <p>{user.created}</p>
                 </div>
+              ))}
+            </>
+          ) : (
+            ""
+          )}
+          {showWLReport ? (
+            <>
+              <h1>Watch List Report:</h1>
+              {itemAmount.map((item) => (
+                <WatchListReport
+                  key={item.id}
+                  id={item.id}
+                  item={item.item}
+                  url={item.url}
+                />
               ))}
             </>
           ) : (
