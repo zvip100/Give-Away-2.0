@@ -13,6 +13,7 @@ import MyAccount from "./my-account.jsx";
 import AboutPage from "./about-page.jsx";
 import { AdminPage } from "./admin.jsx";
 import { Categories } from "./categories.jsx";
+import { Static } from "./static.jsx";
 
 export const AuthContext = createContext(null);
 export const ItemContext = createContext(null);
@@ -89,6 +90,11 @@ export function App() {
       path: "/admin/categories",
       element: <Categories title="Give-Away! - Admin - Categories" />,
       errorElement: <ErrorPage title="Give-Away! - Error!" />,
+    },
+    {
+      path: "/static",
+      element: <Static />,
+      errorElement: <ErrorPage title="static - Error!" />,
     },
   ]);
 

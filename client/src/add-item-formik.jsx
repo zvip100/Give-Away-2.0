@@ -1,11 +1,11 @@
 import logo from "./assets/logo.svg";
+import blocked_logo from "./assets/blocked.svg";
 import { allItems, singleItem } from "./all-items.jsx";
 import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import { itemSchema } from "./item-schema.js";
 import { AuthContext } from "./App.jsx";
-
 
 export default function AddItemFormik(props) {
   function ChangePageTitle() {
@@ -164,13 +164,18 @@ export default function AddItemFormik(props) {
 
   return (
     <>
-      <div>
-        <img src={logo} className="logo react" alt="Give Away logo" />
-      </div>
-
       {askToLogin ? (
         <>
           <h2>You Need To Log-in In To Add A New Item!</h2>
+
+          <section>
+            <img
+              src={blocked_logo}
+              className="logo react"
+              alt="Blocked Access logo"
+            />
+          </section>
+
           <section>
             <button
               type="button"
@@ -184,6 +189,10 @@ export default function AddItemFormik(props) {
         </>
       ) : (
         <>
+          <section>
+            <img src={logo} className="logo react" alt="Give Away logo" />
+          </section>
+
           <h2 ref={pageMsg}>
             Please fill out the fields below to submit your new Item to
             Give-Away!

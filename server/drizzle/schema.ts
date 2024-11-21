@@ -21,6 +21,7 @@ export const users = pgTable(
     name: varchar("name", { length: 255 }).notNull(),
     address: text("address"),
     phone: varchar("phone", { length: 20 }),
+    admin: boolean("admin").default(false).notNull(),
     created_at: timestamp("created_at", { mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

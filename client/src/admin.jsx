@@ -1,8 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "./App";
-import logo from "./assets/logo.svg";
+import dashboard from "./assets/dashboard.svg";
+import blocked_logo from "./assets/blocked.svg";
 import { WatchListReport } from "./watch-list-report";
+import Footer from "./footer.jsx";
 
 export function AdminPage({ title }) {
   function ChangePageTitle() {
@@ -10,13 +12,14 @@ export function AdminPage({ title }) {
   }
 
   useEffect(() => {
-    ChangePageTitle(), checkIfLoggedIn();
+    ChangePageTitle(), checkIfLoggedIn(), checkIfAdmin();
   }, []);
 
   const currentUser = useContext(AuthContext);
   console.log("from Auth context: ", currentUser);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [loggedIn, setLoggedIn] = useState(false);
   const [dropdownValue, setDrpodownValue] = useState("");
   const [showReport, setShowReport] = useState("");
@@ -30,6 +33,13 @@ export function AdminPage({ title }) {
   function checkIfLoggedIn() {
     if (currentUser !== null && currentUser !== undefined) {
       setLoggedIn(true);
+    }
+  }
+
+  function checkIfAdmin() {
+    if (location?.state?.admin === false) {
+      alert("You don't have Admin access!");
+      setLoggedIn(false);
     }
   }
 
@@ -99,6 +109,9 @@ export function AdminPage({ title }) {
         "http://localhost:4000/admin/reports/all-users",
         {
           method: "GET",
+          headers: {
+            "Content-type": "application/json",
+          },
           credentials: "include",
         }
       );
@@ -166,15 +179,23 @@ export function AdminPage({ title }) {
       <div>
         <h1>Give-Away Admin Dashboard!</h1>
       </div>
-      <div>
-        <img src={logo} className="logo react" alt="Give Away logo" />
-      </div>
 
       {loggedIn ? (
         <>
-          <button type="button" onClick={() => navigate("./categories")}>
-            Categories
-          </button>
+          <section>
+            <img
+              src={dashboard}
+              className="logo react"
+              alt="Admin Dashboard logo"
+            />
+          </section>
+
+          <section>
+            <button type="button" onClick={() => navigate("./categories")}>
+              All Item Categories
+            </button>
+          </section>
+
           <h2>Admin Reports:</h2>
 
           <select
@@ -183,9 +204,9 @@ export function AdminPage({ title }) {
             onChange={handleChange}
           >
             <option>Select one option</option>
-            <option>See item uploads by user</option>
-            <option>see all items uploaded today</option>
-            <option>See all items given away today</option>
+            <option disabled>See item uploads by user</option>
+            <option disabled>see all items uploaded today</option>
+            <option disabled>See all items given away today</option>
             <option>See all items added to watch list</option>
             <option>See total amount of items on site</option>
             <option>See total amount of items given away</option>
@@ -251,13 +272,27 @@ export function AdminPage({ title }) {
           )}
         </>
       ) : (
-        <button
-          type="button"
-          onClick={() => navigate("/auth/login", { state: "admin" })}
-        >
-          Log-in
-        </button>
+        <>
+          <section>
+            <img
+              src={blocked_logo}
+              className="logo react"
+              alt="Blocked Access logo"
+            />
+          </section>
+
+          <button
+            type="button"
+            onClick={() => navigate("/auth/login", { state: "admin" })}
+          >
+            Log-in
+          </button>
+        </>
       )}
+
+      <section>
+        <Footer />
+      </section>
     </>
   );
 }

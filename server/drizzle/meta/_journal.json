@@ -36,6 +36,13 @@
       "when": 1730267906573,
       "tag": "0004_rapid_yellow_claw",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1731918630507,
+      "tag": "0005_burly_energizer",
+      "breakpoints": true
     }
   ]
 }

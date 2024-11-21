@@ -1,8 +1,8 @@
-import login_logo from "./assets/login.svg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { SignupSchema } from "./sign-up-schema.js";
+import create_user from "./assets/create-user.svg";
 
 export function SignUp(props) {
   const navigate = useNavigate();
@@ -28,8 +28,6 @@ export function SignUp(props) {
     validationSchema: SignupSchema,
     onSubmit: signUpHandler,
   });
-
-  
 
   async function signUpHandler(values, { resetForm }) {
     console.log("inside sign-up handler");
@@ -76,7 +74,7 @@ export function SignUp(props) {
     <>
       <section>
         <h1>THE SIGN-UP PAGE!</h1>
-        <img src={login_logo} className="logo react" alt="login logo" />
+        <img src={create_user} className="logo react" alt="Create Account logo" />
       </section>
 
       {showMsg ? (
@@ -85,7 +83,8 @@ export function SignUp(props) {
         <>
           <section>
             <h3>
-              Please fill out the fields below to Create An Account on Give-Away:
+              Please fill out the fields below to Create An Account on
+              Give-Away:
             </h3>
           </section>
 

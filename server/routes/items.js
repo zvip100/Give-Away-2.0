@@ -11,6 +11,7 @@ import {
   updateItemStatus,
   addToWatchList,
   getWatchList,
+  removeFromWatchList
 } from "../models/items.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -104,6 +105,17 @@ router.get("/watch_list/:user_id", async (req, res) => {
   try {
     const watchListItems = await getWatchList(userId);
     res.json(watchListItems);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+router.post("/watch-list/remove-item", async (req, res) => {
+  const itemId = req.body.itemId;
+  const userId = req.body.userId;
+  try {
+    const item = await removeFromWatchList(itemId, userId);
+    res.json(item);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

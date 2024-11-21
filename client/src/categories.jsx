@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import dashboard from "./assets/dashboard.svg";
 
 export function Categories({ title }) {
   function ChangePageTitle() {
@@ -88,6 +89,13 @@ export function Categories({ title }) {
 
   return (
     <>
+      <section>
+        <img
+          src={dashboard}
+          className="logo react"
+          alt="Admin Dashboard logo"
+        />
+      </section>
       <section>
         <h1>See All Categories</h1>
 

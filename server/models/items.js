@@ -149,3 +149,12 @@ export const getWatchList = async (userId) => {
     console.error("Error getting the items from Watch list: ", error);
   }
 };
+
+export const removeFromWatchList = async (item, user) => {
+  const removedItem = await db
+    .delete(watchList)
+    .where(and(eq(watchList.item_id, item), eq(watchList.user_id, user)))
+    .returning();
+  console.log("from remove from watch list: ", removedItem);
+  return removedItem;
+};

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import logo from "./assets/logo.svg";
+import loading from "./assets/loading.svg";
 import "./App.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { allItems } from "./all-items.jsx";
@@ -8,6 +9,8 @@ import MyAccount from "./my-account.jsx";
 import { AuthContext } from "./App.jsx";
 import FilterItems from "./filter-items.jsx";
 import { SearchItem } from "./search-items.jsx";
+import Footer from "./footer.jsx";
+import Sidebar from "./side-bar.jsx";
 
 function Homepage(props) {
   const currentUser = useContext(AuthContext);
@@ -19,6 +22,7 @@ function Homepage(props) {
   const [showMyAccountBtn, setShowMyAccountBtn] = useState(false);
   const [showLoginSection, setShowLoginSection] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [showAdminBtn, setShowAdminBtn] = useState(false);
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -54,8 +58,20 @@ function Homepage(props) {
     }
   }
 
+  function activateAdminBtn() {
+    const checkIfAdmin = location?.state?.admin;
+    console.log("is admin? ", checkIfAdmin);
+    if (checkIfAdmin === true) {
+      setShowAdminBtn(true);
+    }
+  }
+
   useEffect(() => {
-    ChangePageTitle(), askForLogin(10000), greetUser(), displayMyAccount();
+    ChangePageTitle(),
+      askForLogin(10000),
+      greetUser(),
+      displayMyAccount(),
+      activateAdminBtn();
   }, []);
 
   useEffect(() => {
@@ -93,11 +109,29 @@ function Homepage(props) {
 
       <h1>WELCOME TO "GIVE-AWAY"!!!</h1>
 
+      {showAdminBtn ? (
+        <section>
+          <Link to={"/admin"}>
+            <button type="button">Admin</button>
+          </Link>
+        </section>
+      ) : (
+        ""
+      )}
+
       <div>
         <Link to={"/about-us"}>
           <img src={logo} className="logo react" alt="Give Away logo" />
         </Link>
       </div>
+
+      <div>
+        <Sidebar />
+      </div>
+
+      {/*<section>
+        <Link to={"/static"}>Static</Link>
+      </section>*/}
 
       <div>
         <button type="button" onClick={() => navigate("/about-us")}>
@@ -177,6 +211,7 @@ function Homepage(props) {
                     condition={item.condition}
                     description={item.description}
                     hasLoaded={true}
+                    showBtn={false}
                   ></Item>{" "}
                 </div>
               ))}
@@ -184,22 +219,15 @@ function Homepage(props) {
           ) : (
             <div>
               <div>
-                <h1>(from client-side)</h1>
+                <h2>Loading Items...</h2>
               </div>
 
               <section>
-                <h2>Discover Our Hot Deals!!</h2>
-
-                {allItems.map((item) => (
-                  <Item
-                    key={item.id}
-                    itemId={item.id}
-                    name={item.name}
-                    img={item.url}
-                    condition={item.condition}
-                    hasLoaded={false}
-                  ></Item>
-                ))}
+                <img
+                  src={loading}
+                  className="logo react"
+                  alt="Loading items logo"
+                />
               </section>
             </div>
           )}
@@ -215,6 +243,9 @@ function Homepage(props) {
           <a href="#top">Return to top of the page</a>
         </>
       )}
+      <section>
+        <Footer />
+      </section>
     </>
   );
 }

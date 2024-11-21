@@ -8,7 +8,8 @@ export default function Item({
   condition,
   description,
   hasLoaded,
-  userId
+  userId,
+  showBtn
 }) {
   const itemData = {
     itemId,
@@ -17,7 +18,8 @@ export default function Item({
     condition,
     description,
     hasLoaded,
-    userId
+    userId,
+    showBtn
   };
   const idType = typeof itemId;
 

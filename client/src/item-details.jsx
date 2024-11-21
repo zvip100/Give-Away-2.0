@@ -3,6 +3,8 @@ import { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import Item from "./item.jsx";
 import { allItems } from "./all-items.jsx";
+import { AuthContext } from "./App.jsx";
+import Footer from "./footer.jsx";
 
 export default function ItemDetails({ title, setDetailedItem }) {
   function ChangePageTitle() {
@@ -10,6 +12,12 @@ export default function ItemDetails({ title, setDetailedItem }) {
   }
 
   useEffect(() => ChangePageTitle, []);
+
+  const currentUser = useContext(AuthContext);
+  console.log("from Auth context: ", currentUser);
+
+  const [showRemoveBtn, setShowRemoveBtn] = useState(false);
+  const [isInWatchList, setIsInWatchList] = useState(false);
 
   const returnBtn = useRef(null);
   const navigate = useNavigate();
@@ -22,13 +30,46 @@ export default function ItemDetails({ title, setDetailedItem }) {
   const hasLoaded = itemData.hasLoaded;
   console.log("hasLoaded:", hasLoaded);
 
+  useEffect(() => {
+    if (itemData?.showBtn === true) {
+      setShowRemoveBtn(true);
+      setIsInWatchList(true);
+    }
+  }, []);
+
   setDetailedItem(itemData);
+
+  async function handleRemoveBtn() {
+    try {
+      const response = await fetch(
+        "http://localhost:4000/items/watch-list/remove-item",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            itemId: itemData.itemId,
+            userId: currentUser,
+          }),
+        }
+      );
+
+      const result = await response.json();
+      console.log("remove from watch-list fetch result: ", result);
+      alert("Item was successfully removed from your Watch-List!");
+      setShowRemoveBtn(false);
+    } catch (error) {
+      console.error("Error removing watch-list", error.message);
+    }
+  }
 
   return (
     <>
       <Link to={"/about-us"}>
-          <img src={logo} className="logo react" alt="Give Away logo" />
-        </Link>
+        <img src={logo} className="logo react" alt="Give Away logo" />
+      </Link>
 
       {hasLoaded ? (
         <section>
@@ -55,12 +96,23 @@ export default function ItemDetails({ title, setDetailedItem }) {
                     name: itemData.name,
                     url: itemData.img,
                     condition: itemData.condition,
+                    watchList: isInWatchList,
                   },
                 })
               }
             >
               Get Item
-            </button>
+            </button>{" "}
+            {""}
+            {showRemoveBtn ? (
+              <>
+                <button type="button" onClick={handleRemoveBtn}>
+                  Remove from Watch-List
+                </button>
+              </>
+            ) : (
+              ""
+            )}
           </section>
         </section>
       ) : (
@@ -104,6 +156,10 @@ export default function ItemDetails({ title, setDetailedItem }) {
         >
           Return To Main Page
         </button>
+      </section>
+
+      <section>
+        <Footer />
       </section>
     </>
   );

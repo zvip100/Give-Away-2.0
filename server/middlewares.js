@@ -85,6 +85,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "null", // for testing from local html files
   "https://telesync.us",
+  "http://localhost:4000"
   // Add more origins as necessary
 ];
 // CORS Middleware

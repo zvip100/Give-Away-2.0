@@ -1,0 +1,1 @@
+ALTER TABLE "users_new" ADD COLUMN "admin" boolean DEFAULT false NOT NULL;

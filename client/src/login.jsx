@@ -2,6 +2,7 @@ import login_logo from "./assets/login.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { ItemContext } from "./App";
+import Footer from "./footer.jsx";
 
 export function Login({ title, setUser }) {
   function ChangePageTitle() {
@@ -24,24 +25,21 @@ export function Login({ title, setUser }) {
   const state = location?.state;
   console.log("login page: ", state);
 
-  function redirectRoute(userId, userName) {
+  function redirectRoute(state, userId, userName, isAdmin) {
     if (state === "return to add-item page") {
-      /* setTimeout(() => {
-        navigate("../add-item-formik", { state: "Logged-in" });
-      }, 3000);*/
       navigate("../add-item-formik", { state: "logged-in" });
     } else if (state?.showDetailsPage === true) {
       navigate(`../item-details/${currentItem.itemId}`, {
         state: currentItem,
       });
     } else if (state === "admin") {
-      navigate("../admin");
+      navigate("../admin", { state: { admin: isAdmin } });
+    } else if (state === "my-account") {
+      navigate("../my-account");
     } else {
-      /* setTimeout(() => {
-        
-        navigate("/", { state: { userId: userId } });
-      }, 3000);*/
-      navigate("/", { state: { userId: userId, userName: userName } });
+      navigate("/", {
+        state: { userId: userId, userName: userName, admin: isAdmin },
+      });
     }
   }
 
@@ -73,6 +71,7 @@ export function Login({ title, setUser }) {
       console.log(result);
       const userId = result.id;
       const userName = result.username;
+      const isAdmin = result.isAdmin;
 
       setUser(userId);
 
@@ -85,7 +84,7 @@ export function Login({ title, setUser }) {
       setShowMsg(true);
       setShowButton(false);
 
-      redirectRoute(userId, userName);
+      redirectRoute(state, userId, userName, isAdmin);
     } catch (error) {
       console.error("Error: ", error);
       setMsg("Login Failed! Please Try Again!");
@@ -100,7 +99,7 @@ export function Login({ title, setUser }) {
     <>
       <section>
         <h1>THE LOGIN PAGE!</h1>
-        <img src={login_logo} className="logo react" alt="login logo" />
+        <img src={login_logo} className="logo react" alt="Login logo" />
       </section>
 
       {showMsg ? (
@@ -154,6 +153,10 @@ export function Login({ title, setUser }) {
       ) : (
         ""
       )}
+
+      <section>
+        <Footer />
+      </section>
     </>
   );
 }

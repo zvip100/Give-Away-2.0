@@ -1,7 +1,10 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useEffect, useContext, useState } from "react";
 import { AuthContext } from "./App.jsx";
 import Item from "./item.jsx";
+import Footer from "./footer.jsx";
+import account_logo from "./assets/account.svg";
+import blocked_logo from "./assets/blocked.svg";
 
 function MyAccount(props) {
   const currentUser = useContext(AuthContext);
@@ -9,15 +12,22 @@ function MyAccount(props) {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const username = location.state;
+  const username = location?.state;
 
   function ChangePageTitle() {
     document.title = props.title;
   }
-  useEffect(() => ChangePageTitle, []);
+  useEffect(() => {
+    ChangePageTitle(), checkIfLoggedIn(currentUser);
+  }, []);
 
+  const [loggedIn, setLoggedIn] = useState(false);
   const [watchList, setWatchList] = useState([]);
   const [showWatchList, setShowWatchList] = useState(false);
+
+  function checkIfLoggedIn(user) {
+    if (user !== null && user !== undefined) setLoggedIn(true);
+  }
 
   async function GetWatchList() {
     try {
@@ -39,6 +49,11 @@ function MyAccount(props) {
 
       const result = await response.json();
       console.log("fetch result: ", result);
+
+      if (result.length === 0) {
+        alert("Nothing in your watch list!");
+        return;
+      }
 
       const filteredResult = result.map((item) => {
         const list = {
@@ -63,44 +78,77 @@ function MyAccount(props) {
 
   return (
     <>
-      <section>
-        <h3>Hello {username}!</h3>
-      </section>
+      {loggedIn ? (
+        <>
+          <section>
+            <h2>Hello {username}!</h2>
+          </section>
 
-      {showWatchList ? (
-        <div>
-          <h1>Your Watch List:</h1>
-          {watchList.map((item, index) => (
-            <div className="single-item" key={index}>
-              <Item
-                key={item.id}
-                itemId={item.id}
-                name={item.name}
-                img={item.image_url}
-                condition={item.condition}
-                description={item.description}
-                hasLoaded={true}
-              ></Item>{" "}
+          <section>
+            <img
+              src={account_logo}
+              className="logo react"
+              alt="My Account logo"
+            />
+          </section>
+
+          {showWatchList ? (
+            <div>
+              <h1>Your Watch List:</h1>
+              {watchList.map((item, index) => (
+                <div className="single-item" key={index}>
+                  <Item
+                    key={item.id}
+                    itemId={item.id}
+                    name={item.name}
+                    img={item.image_url}
+                    condition={item.condition}
+                    description={item.description}
+                    hasLoaded={true}
+                    showBtn={true}
+                  ></Item>{" "}
+                </div>
+              ))}
+              <div>
+                <button type="button" onClick={() => setShowWatchList(false)}>
+                  Dismiss
+                </button>
+              </div>
             </div>
-          ))}
-          <div>
-            <button type="button" onClick={() => setShowWatchList(false)}>
-              Dismiss
-            </button>
-          </div>
-        </div>
+          ) : (
+            <div>
+              <button type="button" onClick={GetWatchList}>
+                My Watch-list
+              </button>
+            </div>
+          )}
+        </>
       ) : (
-        <div>
-          <button type="button" onClick={GetWatchList}>
-            My Watch-list
-          </button>
-        </div>
+        <>
+          <h1>You need to login first!</h1>
+
+          <section>
+            <img
+              src={blocked_logo}
+              className="logo react"
+              alt="Blocked Access logo"
+            />
+          </section>
+
+          <Link to={"../auth/login"} state={"my-account"}>
+            <button type="button">Login</button>
+          </Link>
+        </>
       )}
 
       <section>
         <button type="button" onClick={() => navigate("/")}>
           Main page
         </button>
+      </section>
+
+      <section>
+        <Footer />
       </section>
     </>
   );

@@ -20,6 +20,8 @@ export default function MyCart(props) {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const alreadyInWatchList = location?.state?.watchList;
+  console.log("already in watch-list: ", alreadyInWatchList);
 
   const [askToLogin, setAskToLogin] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
@@ -154,9 +156,13 @@ export default function MyCart(props) {
                 <button type="button" onClick={handleConfirmBtn}>
                   Confirm
                 </button>{" "}
-                <button type="button" onClick={handleWatchListBtn}>
-                  Add To Watch List
-                </button>
+                {alreadyInWatchList ? (
+                  ""
+                ) : (
+                  <button type="button" onClick={handleWatchListBtn}>
+                    Add To Watch List
+                  </button>
+                )}
               </section>
             </>
           )}
