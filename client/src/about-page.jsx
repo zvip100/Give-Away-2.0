@@ -1,15 +1,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import about_logo from "./assets/about.svg";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 function AboutPage(props) {
-  function ChangePageTitle() {
-    document.title = props.title;
-  }
-
   const navigate = useNavigate();
 
-  useEffect(() => ChangePageTitle, []);
+  useEffect(() => {
+    scrollToTop(), ChangePageTitle(props.title);
+  }, []);
 
   return (
     <>

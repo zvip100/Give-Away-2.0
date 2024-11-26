@@ -82,22 +82,33 @@ const authenticateJWT = (req, res, next) => {
 };
 
 const allowedOrigins = [
+  "*",
   "http://localhost:5173",
   "null", // for testing from local html files
   "https://telesync.us",
-  "http://localhost:4000"
+  "http://localhost:4000",
+  "http://192.168.1.2:4000",
+  "http://192.168.1.2:5173",
+
   // Add more origins as necessary
 ];
 // CORS Middleware
 const corsMiddleware = (req, res, next) => {
-  console.log(req);
+  //console.log(req);
   const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
+  if (origin !== undefined) {
+    console.log("origin", origin, "connected");
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  
+
+  /*if (allowedOrigins.includes(origin)) {
     console.log("origin", origin, "connected");
     res.setHeader("Access-Control-Allow-Origin", origin);
   } else {
     console.error(origin, "is not CORS enabled");
-  }
+  }*/
+
   const method = req.method;
   res.setHeader("Access-Control-Allow-Methods", method);
   const allowedHeaders = "Content-Type, Authorization";

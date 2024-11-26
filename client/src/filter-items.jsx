@@ -51,7 +51,7 @@ function FilterItems({ allItems }) {
   return (
     <>
       {showFilter ? (
-        <>
+        <div id="item-filter">
           <h2>Filter By Category:</h2>
 
           <div>
@@ -67,7 +67,7 @@ function FilterItems({ allItems }) {
               <option value="10">Outdoors</option>
             </select> 
           </div>
-        </>
+        </div>
       ) : (
         <>
           <h3>* Showing items of category: "{categoryName}" *</h3>

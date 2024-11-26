@@ -6,12 +6,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import { itemSchema } from "./item-schema.js";
 import { AuthContext } from "./App.jsx";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 export default function AddItemFormik(props) {
-  function ChangePageTitle() {
-    document.title = props.title;
-  }
-
   const currentUser = useContext(AuthContext);
   console.log("from Auth context: ", currentUser);
 
@@ -41,7 +38,7 @@ export default function AddItemFormik(props) {
   }
 
   useEffect(() => {
-    ChangePageTitle(), checkIfLoggedIn();
+    scrollToTop(), ChangePageTitle(props.title), checkIfLoggedIn();
   }, []);
 
   const formik = useFormik({

@@ -41,8 +41,21 @@
   color: #888;
 }
 
-.welcome_user_msg {
+.welcome_user_msg,
+.welcome_msg {
   color: rgb(83, 102, 197);
+}
+
+.account-logo {
+  position: absolute;
+  top: 2%;
+  right: 0%;
+  height: 10%;
+  width: 10%;
+}
+
+.account-logo:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
 .single-item,
@@ -86,4 +99,16 @@ figure {
 
 .err-msg {
   color: red;
+}
+
+.up-arrow {
+  position: fixed;
+  top: 80%;
+  right: 5px;
+  height: 8%;
+  width: 8%;
+}
+
+.up-arrow:hover {
+  filter: opacity(60%);
 }

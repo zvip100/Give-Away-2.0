@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import dashboard from "./assets/dashboard.svg";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 export function Categories({ title }) {
-  function ChangePageTitle() {
-    document.title = title;
-  }
-
-  useEffect(() => ChangePageTitle());
+  useEffect(() => {
+    scrollToTop(), ChangePageTitle(title);
+  }, []);
 
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -160,6 +160,12 @@ export function Categories({ title }) {
           </button>
         </div>
         {showMsg ? <h2>{resultMsg}</h2> : ""}
+      </section>
+
+      <section>
+        <Link to={"/"}>
+          <button type="button">Main Page</button>
+        </Link>
       </section>
     </>
   );

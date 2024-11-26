@@ -14,6 +14,8 @@ import AboutPage from "./about-page.jsx";
 import { AdminPage } from "./admin.jsx";
 import { Categories } from "./categories.jsx";
 import { Static } from "./static.jsx";
+import Terms from "./terms.jsx";
+import Success from "./success.jsx";
 
 export const AuthContext = createContext(null);
 export const ItemContext = createContext(null);
@@ -95,6 +97,16 @@ export function App() {
       path: "/static",
       element: <Static />,
       errorElement: <ErrorPage title="static - Error!" />,
+    },
+    {
+      path: "/terms-&-conditions",
+      element: <Terms />,
+      errorElement: <ErrorPage title="Error" />,
+    },
+    {
+      path: "login-success",
+      element: <Success title="Give-Away! - Login Was Successful!"/>,
+      errorElement: <ErrorPage title="Error" />,
     },
   ]);
 

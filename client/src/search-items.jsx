@@ -17,7 +17,7 @@ export function SearchItem({ _items }) {
 
   return (
     <>
-      <h2>Search For Any Item:</h2>
+      <h2 id="search-item">Search For Any Item:</h2>
 
       <input
         type="text"
@@ -26,14 +26,18 @@ export function SearchItem({ _items }) {
         placeholder="Search for item..."
         value={searchTerm}
         onChange={searchHandler}
-        style={{marginBottom: "3%"}}
+        style={{ marginBottom: "3%" }}
       ></input>
 
-      <div>
-        <button type="button" onClick={handleClick}>
-          Clear
-        </button>
-      </div>
+      {searchTerm ? (
+        <div>
+          <button type="button" onClick={handleClick}>
+            Clear
+          </button>
+        </div>
+      ) : (
+        ""
+      )}
 
       {showResult ? (
         <>

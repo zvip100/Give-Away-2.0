@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { SignupSchema } from "./sign-up-schema.js";
 import create_user from "./assets/create-user.svg";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 export function SignUp(props) {
   const navigate = useNavigate();
@@ -10,11 +11,9 @@ export function SignUp(props) {
   const [showMsg, setShowMsg] = useState(false);
   const [showButton, setShowButton] = useState(true);
 
-  function ChangePageTitle() {
-    document.title = props.title;
-  }
-
-  useEffect(() => ChangePageTitle, []);
+  useEffect(() => {
+    scrollToTop(), ChangePageTitle(props.title);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -74,7 +73,11 @@ export function SignUp(props) {
     <>
       <section>
         <h1>THE SIGN-UP PAGE!</h1>
-        <img src={create_user} className="logo react" alt="Create Account logo" />
+        <img
+          src={create_user}
+          className="logo react"
+          alt="Create Account logo"
+        />
       </section>
 
       {showMsg ? (
@@ -192,7 +195,7 @@ export function SignUp(props) {
                 </button>
               </section>
             </form>
-            <h3>You have an Account already?</h3>
+            <h3>Have an Account already?</h3>
             <button onClick={() => navigate("../auth/login")}>Login</button>
           </div>
         </>

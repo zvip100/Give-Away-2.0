@@ -5,6 +5,7 @@ import Item from "./item.jsx";
 import Footer from "./footer.jsx";
 import account_logo from "./assets/account.svg";
 import blocked_logo from "./assets/blocked.svg";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 function MyAccount(props) {
   const currentUser = useContext(AuthContext);
@@ -14,11 +15,8 @@ function MyAccount(props) {
   const location = useLocation();
   const username = location?.state;
 
-  function ChangePageTitle() {
-    document.title = props.title;
-  }
   useEffect(() => {
-    ChangePageTitle(), checkIfLoggedIn(currentUser);
+    scrollToTop(), ChangePageTitle(props.title), checkIfLoggedIn(currentUser);
   }, []);
 
   const [loggedIn, setLoggedIn] = useState(false);

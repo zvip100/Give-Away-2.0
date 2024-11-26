@@ -1,18 +1,15 @@
 import { useEffect, useState, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "./App";
 import dashboard from "./assets/dashboard.svg";
 import blocked_logo from "./assets/blocked.svg";
 import { WatchListReport } from "./watch-list-report";
 import Footer from "./footer.jsx";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 export function AdminPage({ title }) {
-  function ChangePageTitle() {
-    document.title = title;
-  }
-
   useEffect(() => {
-    ChangePageTitle(), checkIfLoggedIn(), checkIfAdmin();
+    scrollToTop(), ChangePageTitle(title), checkIfLoggedIn(), checkIfAdmin();
   }, []);
 
   const currentUser = useContext(AuthContext);
@@ -20,6 +17,7 @@ export function AdminPage({ title }) {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const adminStatus = location?.state?.admin;
   const [loggedIn, setLoggedIn] = useState(false);
   const [dropdownValue, setDrpodownValue] = useState("");
   const [showReport, setShowReport] = useState("");
@@ -37,8 +35,12 @@ export function AdminPage({ title }) {
   }
 
   function checkIfAdmin() {
-    if (location?.state?.admin === false) {
+    console.log("admin status: ", adminStatus);
+    if (adminStatus === false) {
       alert("You don't have Admin access!");
+      navigate("/");
+    } else if (adminStatus === undefined) {
+      alert("Log-in as Admin");
       setLoggedIn(false);
     }
   }
@@ -289,6 +291,12 @@ export function AdminPage({ title }) {
           </button>
         </>
       )}
+
+      <section>
+        <Link to={"/"}>
+          <button type="button">Main Page</button>
+        </Link>
+      </section>
 
       <section>
         <Footer />

@@ -5,13 +5,12 @@ import Item from "./item.jsx";
 import { allItems } from "./all-items.jsx";
 import { AuthContext } from "./App.jsx";
 import Footer from "./footer.jsx";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 export default function ItemDetails({ title, setDetailedItem }) {
-  function ChangePageTitle() {
-    document.title = title;
-  }
-
-  useEffect(() => ChangePageTitle, []);
+  useEffect(() => {
+    scrollToTop(), ChangePageTitle(title);
+  }, []);
 
   const currentUser = useContext(AuthContext);
   console.log("from Auth context: ", currentUser);

@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import logo from "./assets/logo.svg";
+import account_logo from "./assets/account.svg";
 import loading from "./assets/loading.svg";
+import arrow_up from "./assets/arrow-up.svg";
 import "./App.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { allItems } from "./all-items.jsx";
@@ -11,6 +13,7 @@ import FilterItems from "./filter-items.jsx";
 import { SearchItem } from "./search-items.jsx";
 import Footer from "./footer.jsx";
 import Sidebar from "./side-bar.jsx";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 function Homepage(props) {
   const currentUser = useContext(AuthContext);
@@ -24,6 +27,7 @@ function Homepage(props) {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [showAdminBtn, setShowAdminBtn] = useState(false);
   const [items, setItems] = useState([]);
+  const [mouseOver, setMouseOver] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,10 +36,6 @@ function Homepage(props) {
   //when redirecting from item-details page
   //const user_id = location.state;
   //console.log(user_id);
-
-  function ChangePageTitle() {
-    document.title = props.title;
-  }
 
   function askForLogin(time) {
     if (currentUser === null || currentUser === undefined) {
@@ -47,6 +47,7 @@ function Homepage(props) {
   function displayMyAccount() {
     if (currentUser !== null && currentUser !== undefined) {
       setShowMyAccountBtn(true);
+      setShowMsg(true);
     }
   }
 
@@ -67,7 +68,8 @@ function Homepage(props) {
   }
 
   useEffect(() => {
-    ChangePageTitle(),
+    scrollToTop(),
+      ChangePageTitle(props.title),
       askForLogin(10000),
       greetUser(),
       displayMyAccount(),
@@ -98,16 +100,19 @@ function Homepage(props) {
       {showMsg ? (
         <>
           <Link to={"/my-account"} state={userName}>
-            <h2 className="welcome_user_msg">
-              <i>{welcomeMsg}</i>
-            </h2>
+            <img
+              src={account_logo}
+              className={`account-logo ${mouseOver ? "mouse-over" : ""} `}
+              alt="Give Away logo"
+              onMouseOver={() => setMouseOver(true)}
+            />
           </Link>
         </>
       ) : (
         ""
       )}
 
-      <h1>WELCOME TO "GIVE-AWAY"!!!</h1>
+      <h1 className="welcome_msg">WELCOME TO "GIVE-AWAY"!!!</h1>
 
       {showAdminBtn ? (
         <section>
@@ -240,7 +245,15 @@ function Homepage(props) {
               Logout
             </button>
           </section>
-          <a href="#top">Return to top of the page</a>
+
+          <div>
+            <img
+              src={arrow_up}
+              className="up-arrow"
+              alt="Up Arrow"
+              onClick={scrollToTop}
+            />
+          </div>
         </>
       )}
       <section>

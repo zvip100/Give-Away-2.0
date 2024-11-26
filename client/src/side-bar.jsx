@@ -11,9 +11,12 @@ function Sidebar() {
 
   return (
     <div>
-      <button className="sidebar-btn" onClick={toggleSidebar}>
-        Sidebar
-      </button>
+      <div onClick={toggleSidebar}>
+        <button type="button" className="sidebar-btn">
+          Sidebar
+        </button>
+      </div>
+
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         <section>
           <button
@@ -21,36 +24,70 @@ function Sidebar() {
             className="hide-sidebar"
             onClick={toggleSidebar}
           >
-            Hide Sidebar
+            Close Sidebar
           </button>
         </section>
 
-        <SidebarOption link={"/auth/login"} value={"Login"} />
+        <SidebarOption type={"link"} link={"/auth/login"} value={"Login"} />
 
-        <SidebarOption link={"/sign-up"} value={"Create Account"} />
+        <SidebarOption
+          type={"link"}
+          link={"/sign-up"}
+          value={"Create Account"}
+        />
 
-        <SidebarOption link={"/add-item-formik"} value={"Add New Item"} />
+        <SidebarOption
+          type={"#"}
+          link={"#search-item"}
+          value={"Search Any Item"}
+        />
 
-        <SidebarOption link={"/my-account"} value={"My Account"} />
+        <SidebarOption
+          type={"#"}
+          link={"#item-filter"}
+          value={"Items by Category"}
+        />
 
-        <SidebarOption link={"/about-us"} value={"About Us"} />
+        <SidebarOption
+          type={"link"}
+          link={"/add-item-formik"}
+          value={"Add New Item"}
+        />
 
-        <SidebarOption link={"/Admin"} value={"Admin"} />
+        <SidebarOption
+          type={"link"}
+          link={"/my-account"}
+          value={"My Account"}
+        />
 
-        <a href="#footer">
-          <button type="button" className="sidebar-option">Contact Us</button>
-        </a>
+        <SidebarOption type={"link"} link={"/about-us"} value={"About Us"} />
+
+        <SidebarOption type={"link"} link={"/Admin"} value={"Admin"} />
+
+        <SidebarOption type={"#"} link={"#contact-us"} value={"Contact Us"} />
+
+        <SidebarOption type={"#"} link={"#top"} value={"Top Of Page"} />
       </div>
     </div>
   );
 }
 
-function SidebarOption({ link, value }) {
+function SidebarOption({ type, link, value }) {
   return (
     <section>
-      <Link to={link}>
-        <button type="button" className="sidebar-option">{value}</button>
-      </Link>
+      {type === "link" ? (
+        <Link to={link}>
+          <button type="button" className="sidebar-option">
+            {value}
+          </button>
+        </Link>
+      ) : (
+        <a href={link}>
+          <button type="button" className="sidebar-option">
+            {value}
+          </button>
+        </a>
+      )}
     </section>
   );
 }

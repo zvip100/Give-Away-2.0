@@ -1,14 +1,12 @@
 import { useRouteError } from "react-router-dom";
 import { useEffect } from "react";
 import error_logo from "./assets/error.svg";
-
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 export default function ErrorPage(props) {
-  function ChangePageTitle() {
-    document.title = props.title;
-  }
-
-  useEffect(() => ChangePageTitle, []);
+  useEffect(() => {
+    scrollToTop(), ChangePageTitle(props.title);
+  }, []);
 
   const error = useRouteError();
   console.error(error);

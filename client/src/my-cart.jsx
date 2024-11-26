@@ -2,14 +2,11 @@ import logo from "./assets/logo.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext, ItemContext } from "./App";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
 
 export default function MyCart(props) {
-  function ChangePageTitle() {
-    document.title = props.title;
-  }
-
   useEffect(() => {
-    ChangePageTitle(), checkIfLoggedIn();
+    scrollToTop(), ChangePageTitle(props.title), checkIfLoggedIn();
   }, []);
 
   const currentUser = useContext(AuthContext);

@@ -15,16 +15,20 @@
 .sidebar-btn {
   position: fixed;
   top: 5%;
-
   left: 0;
-  height: 8%;
   background-color: rgba(124, 204, 230, 0.856);
   transition: left 0.3s ease-in-out;
 }
+
+.sidebar-btn-txt {
+  font-size: large;
+  padding-bottom: 2%;
+}
 .hide-sidebar {
-    background-color: rgba(124, 204, 230, 0.856);
+  background-color: rgba(124, 204, 230, 0.856);
 }
 
 .sidebar-option {
-    width: 70%;
+  width: 70%;
 }
+

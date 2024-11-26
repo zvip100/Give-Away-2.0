@@ -1,15 +1,17 @@
 import login_logo from "./assets/login.svg";
+import confirmed_logo from "./assets/user-confirmed.svg";
+import login_error_logo from "./assets/login-error.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { ItemContext } from "./App";
 import Footer from "./footer.jsx";
+import { scrollToTop, ChangePageTitle } from "./functions.js";
+import sleep from "sleep-promise";
 
 export function Login({ title, setUser }) {
-  function ChangePageTitle() {
-    document.title = title;
-  }
-
-  useEffect(() => ChangePageTitle, []);
+  useEffect(() => {
+    scrollToTop(), ChangePageTitle(title);
+  }, []);
 
   const currentItem = useContext(ItemContext);
   console.log("from login page: ", currentItem);
@@ -25,7 +27,10 @@ export function Login({ title, setUser }) {
   const state = location?.state;
   console.log("login page: ", state);
 
+  //let test = false;
+
   function redirectRoute(state, userId, userName, isAdmin) {
+    console.log("redirect function in action!");
     if (state === "return to add-item page") {
       navigate("../add-item-formik", { state: "logged-in" });
     } else if (state?.showDetailsPage === true) {
@@ -36,19 +41,32 @@ export function Login({ title, setUser }) {
       navigate("../admin", { state: { admin: isAdmin } });
     } else if (state === "my-account") {
       navigate("../my-account");
-    } else {
+    } /*else {
       navigate("/", {
         state: { userId: userId, userName: userName, admin: isAdmin },
       });
-    }
+    }*/
+  }
+
+  function handleFailedLogin() {
+    setShowMsg(true);
+    setTimeout(() => setShowMsg(false), 4000);
+    setEmail("");
+    setPassword("");
   }
 
   const submitHandler = async (event) => {
     event.preventDefault();
 
-    /*const email = event.target.username.value;
-    const password = event.target.password.value;*/
     console.log(email, password);
+
+    if (email === "" || password === "") {
+      alert("You have to fill out the fields below to Log-in!");
+      setEmail("");
+      setPassword("");
+      scrollToTop();
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:4000/login", {
@@ -69,43 +87,85 @@ export function Login({ title, setUser }) {
 
       const result = await response.json();
       console.log(result);
+
+      if (
+        result?.message === "User not found" ||
+        result?.message === "Invalid password"
+      ) {
+        setMsg("Username or Password is incorrect! Please try again!");
+        handleFailedLogin();
+        return;
+      }
+
       const userId = result.id;
       const userName = result.username;
       const isAdmin = result.isAdmin;
 
       setUser(userId);
 
-      if (state === "return to add-item page") {
+      /*if (state === "return to add-item page") {
         setMsg("Login Successful! Redirecting To The Add-Item Page!");
       } else {
         setMsg("Login Successful! Redirecting To The Home Page!");
-      }
+      }*/
 
+      setMsg("Login Successful!");
       setShowMsg(true);
       setShowButton(false);
 
-      redirectRoute(state, userId, userName, isAdmin);
+      if (state === null) {
+        navigate("../login-success", {
+          state: { userId: userId, userName: userName, isAdmin: isAdmin },
+        });
+      } else {
+        redirectRoute(state, userId, userName, isAdmin);
+      }
+
+      //redirectRoute(state, userId, userName, isAdmin);
+
+      /* (async () => {
+        await sleep(2000);
+        redirectRoute(state, userId, userName, isAdmin);
+        console.log('2 seconds later …');
+    })();*/
+
+      /* setTimeout(() => {
+        redirectRoute(state, userId, userName, isAdmin);
+      }, 3000);*/
     } catch (error) {
       console.error("Error: ", error);
       setMsg("Login Failed! Please Try Again!");
-      setShowMsg(true);
-      setTimeout(() => setShowMsg(false), 3000);
-      setEmail("");
-      setPassword("");
+      handleFailedLogin();
     }
   };
 
+  /*async function Delay(id, name, admin) {
+    await sleep(2000);
+    //redirectRoute(state, id, name, admin);
+    test = true;
+    console.log("2 seconds later …");
+  }*/
+
   return (
     <>
-      <section>
-        <h1>THE LOGIN PAGE!</h1>
-        <img src={login_logo} className="logo react" alt="Login logo" />
-      </section>
-
       {showMsg ? (
-        <h2>{msg}</h2>
+        <>
+          <h2 style={{ color: "rgb(83, 102, 197)" }}>{msg}</h2>
+          <section>
+            <img
+              src={login_error_logo}
+              className="logo react"
+              alt="Login Failed logo"
+            />
+          </section>
+        </>
       ) : (
         <>
+          <section>
+            <h1>THE LOGIN PAGE!</h1>
+            <img src={login_logo} className="logo react" alt="Login logo" />
+          </section>
+
           <section>
             <h3>Please fill out the fields below to log-in to Give-Away:</h3>
           </section>
